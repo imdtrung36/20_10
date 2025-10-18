@@ -8,9 +8,34 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5173', // Vite default port
+    'https://imdtrung36.github.io',
+    'https://imdtrung36.github.io/20_10'
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Additional CORS headers for better compatibility
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+});
 
 // Data files
 const flowersDataPath = path.join(__dirname, 'data', 'flowers.json');
@@ -101,8 +126,9 @@ app.get('/api/health', (req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  console.log(`Health check: http://localhost:${PORT}/api/health`);
-  console.log(`Flowers API: http://localhost:${PORT}/api/flowers`);
-  console.log(`Messages API: http://localhost:${PORT}/api/messages`);
+  console.log(`🚀 Server is running on port ${PORT}`);
+  console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
+  console.log(`🌹 Flowers API: http://localhost:${PORT}/api/flowers`);
+  console.log(`💌 Messages API: http://localhost:${PORT}/api/messages`);
+  console.log(`🌐 CORS enabled for: localhost:3000, localhost:5173, imdtrung36.github.io`);
 });

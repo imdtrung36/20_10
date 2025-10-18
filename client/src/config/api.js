@@ -5,7 +5,7 @@ const isProduction = import.meta.env.PROD;
 // Base URL for API calls
 export const API_BASE_URL = isDevelopment 
   ? 'http://localhost:5000' 
-  : 'https://your-backend-url.herokuapp.com'; // Replace with your actual backend URL
+  : 'http://localhost:5000'; 
 
 // API endpoints
 export const API_ENDPOINTS = {
