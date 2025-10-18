@@ -1,0 +1,180 @@
+/* 🌸 Khung form gửi lời chúc */
+.message-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  padding: 30px 40px;
+  width: 450px;               /* 🔹 tăng chiều rộng */
+  margin: 60px auto;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* 📝 Input & textarea */
+.message-form input,
+.message-form textarea {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 14px 16px;          /* 🔹 tăng padding */
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+/* ✨ Hiệu ứng khi focus */
+.message-form input:focus,
+.message-form textarea:focus {
+  border-color: #d63384;
+  box-shadow: 0 0 5px rgba(214, 51, 132, 0.4);
+}
+
+/* 💌 Textarea to hơn */
+.message-form textarea {
+  height: 120px;              /* 🔹 tăng chiều cao */
+  resize: none;
+}
+
+/* 📝 Input tên người gửi */
+.message-form input {
+  height: 50px;               /* 🔹 chiều cao cho input */
+}
+
+/* 💖 Nút gửi */
+.message-form button {
+  background: #d63384;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.message-form button:hover {
+  background: #c2185b;
+  transform: scale(1.05);
+}
+
+/* 🎉 Thông báo sau khi gửi */
+.notice {
+  color: #28a745;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* 🎊 Thiệp chúc mừng */
+.celebration-card-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.celebration-card {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.5s ease;
+  position: relative;
+  border: 3px solid #fff;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.card-header h2 {
+  color: #d63384;
+  font-size: 24px;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #d63384;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+  background: rgba(214, 51, 132, 0.1);
+  transform: scale(1.1);
+}
+
+.card-content {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.message-display {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.message-display p {
+  font-size: 18px;
+  color: #333;
+  margin: 0 0 10px 0;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.sender {
+  color: #d63384;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.card-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.card-footer p {
+  color: #d63384;
+  font-weight: bold;
+  margin: 0;
+  font-size: 16px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { 
+    transform: translateY(-50px) scale(0.8);
+    opacity: 0;
+  }
+  to { 
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}

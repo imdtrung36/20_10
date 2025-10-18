@@ -1,0 +1,25 @@
+.app {
+  text-align: center;
+  padding: 20px;
+  background-color: #ffeef2;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.title {
+  color: #d63384;
+  margin-bottom: 20px;
+}
+
+.menu button {
+  margin: 0 10px;
+  padding: 8px 16px;
+  border: none;
+  background: #d63384;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.menu button:hover {
+  background: #c2185b;
+}

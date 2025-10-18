@@ -1,0 +1,125 @@
+/* 🌸 Đưa menu vào giữa màn hình */
+.app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* Căn giữa theo chiều dọc */
+  align-items: center;       /* Căn giữa theo chiều ngang */
+  height: 100vh;             /* Chiếm toàn bộ chiều cao màn hình */
+  background: linear-gradient(180deg, #ffe4ec, #fff9fb);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow-x: hidden;
+}
+
+/* 🌷 Tiêu đề */
+.title {
+  color: #d63384;
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+}
+
+/* 🌸 Căn giữa menu nhưng không bị nhảy */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh; /* cố định khoảng cao cho header */
+}
+
+.title {
+  color: #d63384;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+/* 🌺 Nút menu */
+.menu {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+}
+
+.menu button {
+  background-color: #d63384;
+  color: white;
+  border: none;
+  padding: 16px 28px;
+  border-radius: 12px;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.menu button:hover {
+  background-color: #c2185b;
+  transform: scale(1.05);
+}
+
+/* 🌷 Khu nội dung hiển thị bên dưới menu */
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 60vh; /* chiếm phần còn lại của màn hình */
+  padding-bottom: 80px;
+}
+/* 🎵 Nút bật/tắt nhạc — đặt ở góc trên bên trái */
+.music-btn {
+  position: fixed;
+  top: 20px;           /* 🔼 đưa lên trên */
+  left: 20px;          /* 🔹 sang trái */
+  background: #d63384;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.music-btn:hover {
+  background: #c2185b;
+  transform: scale(1.05);
+}
+
+/* 🌸 Hiệu ứng cánh hoa đào rơi */
+.petals {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.petal {
+  position: absolute;
+  top: -10vh;
+  background: radial-gradient(circle at 30% 30%, #ffb7c5 0%, #ff80ab 70%, #ff6699 100%);
+  width: 12px;
+  height: 12px;
+  border-radius: 70% 30% 70% 30%;
+  opacity: 0.9;
+  animation: fall linear forwards;
+}
+
+/* 💞 Chuyển động rơi tự nhiên */
+@keyframes fall {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) translateX(30px) rotate(360deg);
+    opacity: 0.2;
+  }
+}
+
+
+
