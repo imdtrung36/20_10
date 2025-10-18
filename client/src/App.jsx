@@ -5,7 +5,7 @@ import "./styles/index.css";
 
 function App() {
   const [page, setPage] = useState("form");
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [showScroll, setShowScroll] = useState(false);
   const audioRef = useRef(null);
 
