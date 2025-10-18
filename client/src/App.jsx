@@ -26,8 +26,10 @@ function App() {
   // 🎵 nhạc nền
   useEffect(() => {
     const audio = document.getElementById("bg-music");
-    if (isPlaying) audio.play().catch(() => { });
-    else audio.pause();
+    if (audio) {
+      if (isPlaying) audio.play().catch(() => { });
+      else audio.pause();
+    }
   }, [isPlaying]);
 
   // hiển thị nút lên đầu
@@ -66,7 +68,7 @@ function App() {
 
   return (
     <div className="app">
-      <audio src={import.meta.env.BASE_URL + "music.mp3"} controls />
+      <audio id="bg-music" src={import.meta.env.BASE_URL + "music.mp3"} controls />
     
       {/* 🌷 Thanh tiêu đề và menu ở giữa */}
       <header className="header">
