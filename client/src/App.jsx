@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import MessageForm from "./pages/MessageForm";
 import MessagesList from "./pages/MessagesList";
 import "./styles/index.css";
@@ -7,6 +7,7 @@ function App() {
   const [page, setPage] = useState("form");
   const [isPlaying, setIsPlaying] = useState(true);
   const [showScroll, setShowScroll] = useState(false);
+  const audioRef = useRef(null);
 
   // 🌸 hiệu ứng hoa rơi
   useEffect(() => {
@@ -25,19 +26,23 @@ function App() {
 
   // 🎵 nhạc nền
   useEffect(() => {
-    const audio = document.getElementById("bg-music");
+    const audio = audioRef.current;
     if (audio) {
-      if (isPlaying) audio.play().catch(() => { });
-      else audio.pause();
+      if (isPlaying) {
+        audio.play().catch(err => console.log("Không thể phát tự động:", err));
+      } else {
+        audio.pause();
+      }
     }
   }, [isPlaying]);
 
-  // hiển thị nút lên đầu
+  // Hiển thị nút lên đầu
   useEffect(() => {
     const handleScroll = () => setShowScroll(window.scrollY > 200);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
   // 🌸 Cánh hoa đào rơi
   useEffect(() => {
     const petalsContainer = document.createElement("div");
@@ -48,7 +53,6 @@ function App() {
       const petal = document.createElement("div");
       petal.classList.add("petal");
 
-      // vị trí & kích thước ngẫu nhiên
       petal.style.left = Math.random() * 100 + "vw";
       petal.style.animationDuration = 6 + Math.random() * 5 + "s";
       petal.style.width = 8 + Math.random() * 10 + "px";
@@ -68,9 +72,15 @@ function App() {
 
   return (
     <div className="app">
-      <audio id="bg-music" src={import.meta.env.BASE_URL + "music.mp3"} controls />
-    
-      {/* 🌷 Thanh tiêu đề và menu ở giữa */}
+      <audio
+        ref={audioRef}
+        id="bg-music"
+        src={import.meta.env.BASE_URL + "music.mp3"}
+        onLoadedData={() => {
+          if (isPlaying) audioRef.current.play().catch(() => {});
+        }}
+      />
+
       <header className="header">
         <h1 className="title">💐 Flower & Message 20/10</h1>
         <div className="menu">
@@ -79,13 +89,11 @@ function App() {
         </div>
       </header>
 
-      {/* 💌 Khu vực hiển thị nội dung bên dưới */}
       <main className="content">
         {page === "form" && <MessageForm />}
         {page === "messages" && <MessagesList />}
       </main>
 
-      {/* 🎵 Nút bật/tắt nhạc */}
       <button
         className="music-btn"
         onClick={() => setIsPlaying(!isPlaying)}
@@ -94,7 +102,6 @@ function App() {
         {isPlaying ? "🔊 Tắt nhạc" : "🎵 Bật nhạc"}
       </button>
 
-      {/* ⬆️ Nút lên đầu */}
       {showScroll && (
         <button
           className="scroll-top"
