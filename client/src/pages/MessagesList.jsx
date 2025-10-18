@@ -30,33 +30,33 @@ export default function MessagesList() {
     <>
       <div className="tree-container">
         <div className="tree">
-          <img src="/20_10/tree.png" alt="tree" className="tree-image" />
-        {messages.map((msg, i) => {
-          // Vị trí cố định dựa trên index
-          const positions = [
-            { left: 20, top: 15, rotate: -5 },
-            { left: 70, top: 20, rotate: 8 },
-            { left: 15, top: 45, rotate: -12 },
-            { left: 75, top: 40, rotate: 15 },
-            { left: 25, top: 70, rotate: -8 },
-            { left: 65, top: 75, rotate: 10 },
-            { left: 45, top: 25, rotate: 3 },
-            { left: 50, top: 60, rotate: -6 }
-          ];
-          
-          const position = positions[i % positions.length];
+          <img src={import.meta.env.BASE_URL + "tree.png"} alt="Tree" />
+          {messages.map((msg, i) => {
+            // Vị trí cố định dựa trên index
+            const positions = [
+              { left: 20, top: 15, rotate: -5 },
+              { left: 70, top: 20, rotate: 8 },
+              { left: 15, top: 45, rotate: -12 },
+              { left: 75, top: 40, rotate: 15 },
+              { left: 25, top: 70, rotate: -8 },
+              { left: 65, top: 75, rotate: 10 },
+              { left: 45, top: 25, rotate: 3 },
+              { left: 50, top: 60, rotate: -6 }
+            ];
 
-          return (
-            <div
-              key={i}
-              className="letter clickable-card"
-              style={{
-                left: `${position.left}%`,
-                top: `${position.top}%`,
-                transform: `rotate(${position.rotate}deg)`,
-              }}
-              onClick={() => openMessage(msg)}
-            >
+            const position = positions[i % positions.length];
+
+            return (
+              <div
+                key={i}
+                className="letter clickable-card"
+                style={{
+                  left: `${position.left}%`,
+                  top: `${position.top}%`,
+                  transform: `rotate(${position.rotate}deg)`,
+                }}
+                onClick={() => openMessage(msg)}
+              >
                 <div className="paper">
                   <div className="card-preview">
                     <p className="message-preview">💌</p>

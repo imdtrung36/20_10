@@ -66,8 +66,8 @@ function App() {
 
   return (
     <div className="app">
-      <audio id="bg-music" src="/20_10/music.mp3" loop></audio>
-
+      <audio src={import.meta.env.BASE_URL + "music.mp3"} controls />
+    
       {/* 🌷 Thanh tiêu đề và menu ở giữa */}
       <header className="header">
         <h1 className="title">💐 Flower & Message 20/10</h1>
