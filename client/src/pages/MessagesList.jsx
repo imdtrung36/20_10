@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { API_ENDPOINTS, FALLBACK_DATA } from "../config/api";
 import "../styles/MessagesList.css";
 
 export default function MessagesList() {
@@ -7,9 +8,14 @@ export default function MessagesList() {
   const [selectedMessage, setSelectedMessage] = useState(null);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/messages").then((res) => {
-      setMessages(res.data);
-    });
+    axios.get(API_ENDPOINTS.MESSAGES)
+      .then((res) => {
+        setMessages(res.data);
+      })
+      .catch(error => {
+        console.warn('API not available, using fallback data:', error);
+        setMessages(FALLBACK_DATA.messages);
+      });
   }, []);
 
   const openMessage = (message) => {
@@ -24,7 +30,7 @@ export default function MessagesList() {
     <>
       <div className="tree-container">
         <div className="tree">
-          <img src="/tree.png" alt="tree" className="tree-image" />
+          <img src="/20_10/tree.png" alt="tree" className="tree-image" />
         {messages.map((msg, i) => {
           // Vị trí cố định dựa trên index
           const positions = [

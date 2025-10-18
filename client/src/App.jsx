@@ -66,7 +66,7 @@ function App() {
 
   return (
     <div className="app">
-      <audio id="bg-music" src="/music.mp3" loop></audio>
+      <audio id="bg-music" src="/20_10/music.mp3" loop></audio>
 
       {/* 🌷 Thanh tiêu đề và menu ở giữa */}
       <header className="header">

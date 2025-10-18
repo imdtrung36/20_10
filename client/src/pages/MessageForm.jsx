@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../config/api';
 import '../styles/MessageForm.css';
 
 export default function MessageForm() {
@@ -19,7 +20,7 @@ export default function MessageForm() {
     }
     
     try {
-      const res = await axios.post('http://localhost:5000/api/messages', { name: name.trim(), message: message.trim() });
+      const res = await axios.post(API_ENDPOINTS.MESSAGES, { name: name.trim(), message: message.trim() });
       if (res.data) {
         setCardMessage(message);
         setCardSender(name);
