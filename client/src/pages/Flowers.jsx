@@ -6,7 +6,7 @@ export default function Flowers() {
   const [flowers, setFlowers] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/api/flowers').then(res => setFlowers(res.data));
+    axios.get('http://localhost:5000/api/flowers').then(res => setFlowers(res.data));
   }, []);
 
   return (

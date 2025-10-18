@@ -19,7 +19,7 @@ export default function MessageForm() {
     }
     
     try {
-      const res = await axios.post('http://localhost:3001/api/messages', { name: name.trim(), message: message.trim() });
+      const res = await axios.post('http://localhost:5000/api/messages', { name: name.trim(), message: message.trim() });
       if (res.data) {
         setCardMessage(message);
         setCardSender(name);

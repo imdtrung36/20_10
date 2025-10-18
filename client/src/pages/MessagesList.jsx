@@ -7,7 +7,7 @@ export default function MessagesList() {
   const [selectedMessage, setSelectedMessage] = useState(null);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/api/messages").then((res) => {
+    axios.get("http://localhost:5000/api/messages").then((res) => {
       setMessages(res.data);
     });
   }, []);
