@@ -9,78 +9,52 @@ function App() {
   const [showScroll, setShowScroll] = useState(false);
   const audioRef = useRef(null);
 
-  // 🌸 hiệu ứng hoa rơi
+  // ✅ Play nhạc sau khi người dùng click bất kỳ (tránh lỗi autoplay + null)
   useEffect(() => {
-    const createFlower = () => {
-      const flower = document.createElement("div");
-      flower.classList.add("flower");
-      flower.innerText = ["🌸", "🌺", "🌷", "💮"][Math.floor(Math.random() * 4)];
-      flower.style.left = Math.random() * 100 + "vw";
-      flower.style.animationDuration = 4 + Math.random() * 3 + "s";
-      document.body.appendChild(flower);
-      setTimeout(() => flower.remove(), 7000);
+    const handleFirstClick = () => {
+      if (audioRef.current) {
+        audioRef.current
+          .play()
+          .then(() => setIsPlaying(true))
+          .catch((err) => console.warn("Autoplay bị chặn:", err));
+      } else {
+        console.warn("Audio chưa sẵn sàng khi click");
+      }
+      document.removeEventListener("click", handleFirstClick);
     };
-    const interval = setInterval(createFlower, 400);
-    return () => clearInterval(interval);
+    document.addEventListener("click", handleFirstClick);
+    return () => document.removeEventListener("click", handleFirstClick);
   }, []);
 
-  // 🎵 nhạc nền
+  // ✅ Điều khiển bật / tắt nhạc
   useEffect(() => {
     const audio = audioRef.current;
-    if (audio) {
-      if (isPlaying) {
-        audio.play().catch(err => console.log("Không thể phát tự động:", err));
-      } else {
-        audio.pause();
-      }
+    if (!audio) return; // tránh lỗi null
+    if (isPlaying) {
+      audio.play().catch((err) => console.warn("Không thể phát:", err));
+    } else {
+      audio.pause();
     }
   }, [isPlaying]);
 
-  // Hiển thị nút lên đầu
+  // ✅ Nút cuộn lên đầu
   useEffect(() => {
     const handleScroll = () => setShowScroll(window.scrollY > 200);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // 🌸 Cánh hoa đào rơi
-  useEffect(() => {
-    const petalsContainer = document.createElement("div");
-    petalsContainer.classList.add("petals");
-    document.body.appendChild(petalsContainer);
-
-    const createPetal = () => {
-      const petal = document.createElement("div");
-      petal.classList.add("petal");
-
-      petal.style.left = Math.random() * 100 + "vw";
-      petal.style.animationDuration = 6 + Math.random() * 5 + "s";
-      petal.style.width = 8 + Math.random() * 10 + "px";
-      petal.style.height = 8 + Math.random() * 10 + "px";
-      petal.style.opacity = 0.6 + Math.random() * 0.4;
-
-      petalsContainer.appendChild(petal);
-      setTimeout(() => petal.remove(), 11000);
-    };
-
-    const interval = setInterval(createPetal, 250);
-    return () => {
-      clearInterval(interval);
-      petalsContainer.remove();
-    };
-  }, []);
-
   return (
     <div className="app">
+      {/* 🎵 Thẻ audio */}
       <audio
         ref={audioRef}
         id="bg-music"
         src={import.meta.env.BASE_URL + "music.mp3"}
-        onLoadedData={() => {
-          if (isPlaying) audioRef.current.play().catch(() => {});
-        }}
+        preload="auto"
       />
 
+      {/* 🌸 Giao diện */}
       <header className="header">
         <h1 className="title">💐 Flower & Message 20/10</h1>
         <div className="menu">
@@ -94,6 +68,7 @@ function App() {
         {page === "messages" && <MessagesList />}
       </main>
 
+      {/* 🎵 Nút bật/tắt nhạc */}
       <button
         className="music-btn"
         onClick={() => setIsPlaying(!isPlaying)}
@@ -102,6 +77,7 @@ function App() {
         {isPlaying ? "🔊 Tắt nhạc" : "🎵 Bật nhạc"}
       </button>
 
+      {/* ⬆️ Nút cuộn lên đầu */}
       {showScroll && (
         <button
           className="scroll-top"
