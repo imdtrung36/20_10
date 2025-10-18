@@ -5,7 +5,7 @@ const isProduction = import.meta.env.PROD;
 // Base URL for API calls
 export const API_BASE_URL = isDevelopment 
   ? 'http://localhost:5000' 
-  : 'http://localhost:5000'; 
+  : 'https://two0-10-5pu7.onrender.com'; 
 
 // API endpoints
 export const API_ENDPOINTS = {
