@@ -11485,7 +11485,7 @@ function jm() {
           children: [
             R.jsx("h1", {
               className: "title",
-              children: "💐 Flower & Message 20/10",
+              children: "💐 Ngày Phụ nữ Việt Nam",
             }),
             R.jsxs("div", {
               className: "menu",
