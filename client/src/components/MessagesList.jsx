@@ -7,6 +7,84 @@ export default function MessagesList() {
   const [messages, setMessages] = useState([]);
   const [selectedMessage, setSelectedMessage] = useState(null);
 
+  // Generate stable pseudo-random number from a seed (id/string)
+  const seedToUnit = (seed) => {
+    const str = String(seed ?? "");
+    let hash = 0;
+    for (let i = 0; i < str.length; i += 1) {
+      // Simple string hash, bounded to keep deterministic yet lightweight
+      hash = (hash * 31 + str.charCodeAt(i)) % 1000003;
+    }
+    return (hash % 1000) / 1000; // 0..1
+  };
+
+  // Golden-angle spiral to spread notes across the tree area without a hard cap
+  const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
+  const computePosition = (index, seed) => {
+    const n = index + 1; // avoid zero
+    const c = 4; // step radius in percentage units
+    const r = c * Math.sqrt(n);
+    const theta = n * GOLDEN_ANGLE + seed * 2 * Math.PI;
+
+    // Base around the visual crown of the tree
+    let left = 50 + r * Math.cos(theta);
+    let top = 46 + 0.85 * r * Math.sin(theta);
+
+    // Keep within the crown bounds (avoid trunk and edges)
+    left = Math.max(8, Math.min(84, left));
+    top = Math.max(12, Math.min(76, top));
+
+    // Slight, deterministic rotation per card
+    const rotate = -12 + (seed * 24);
+    return { left, top, rotate };
+  };
+
+  // Collision-avoidance layout
+  const CARD_W = 16; // approximate width in % of container
+  const CARD_H = 10; // approximate height in %
+  const margin = 1.2; // spacing between cards in %
+
+  const toRect = (pos) => ({
+    l: pos.left,
+    t: pos.top,
+    r: pos.left + CARD_W,
+    b: pos.top + CARD_H,
+  });
+
+  const intersects = (a, b) => !(a.r + 0 <= b.l - margin || a.l - 0 >= b.r + margin || a.b + 0 <= b.t - margin || a.t - 0 >= b.b + margin);
+
+  const placeNonOverlapping = (index, seed, placed) => {
+    // Try base position first, then expand radius/angle until no collision or max tries
+    let radiusBoost = 0;
+    let angleJitter = 0;
+    for (let tries = 0; tries < 160; tries += 1) {
+      const n = index + 1;
+      const c = 4;
+      const r = c * Math.sqrt(n) + radiusBoost;
+      const theta = n * GOLDEN_ANGLE + seed * 2 * Math.PI + angleJitter;
+
+      let left = 50 + r * Math.cos(theta);
+      let top = 46 + 0.85 * r * Math.sin(theta);
+
+      left = Math.max(6, Math.min(94 - CARD_W, left));
+      top = Math.max(10, Math.min(90 - CARD_H, top));
+
+      const pos = { left, top, rotate: -12 + seed * 24 };
+      const rect = toRect(pos);
+      let ok = true;
+      for (let j = 0; j < placed.length; j += 1) {
+        if (intersects(rect, toRect(placed[j]))) { ok = false; break; }
+      }
+      if (ok) return pos;
+
+      // Increase radius gradually and wobble angle slightly
+      radiusBoost += 1.6;
+      angleJitter += 0.35 + seed * 0.2;
+    }
+    // Fallback: return base computed position even if it collides
+    return computePosition(index, seed);
+  };
+
   useEffect(() => {
     const fetchMessages = () => {
       axios
@@ -71,21 +149,14 @@ export default function MessagesList() {
       {/* 🌸 Cây + lá thư */}
       <div className="tree-container">
         <div className="tree">
-          <img src={import.meta.env.BASE_URL + "tree.png"} alt="Tree" />
+          <img className="tree-image" src={import.meta.env.BASE_URL + "tree.png"} alt="Tree" />
 
-          {messages.map((msg, i) => {
-            const positions = [
-              { left: 20, top: 15, rotate: -5 },
-              { left: 70, top: 20, rotate: 8 },
-              { left: 15, top: 45, rotate: -12 },
-              { left: 75, top: 40, rotate: 15 },
-              { left: 25, top: 70, rotate: -8 },
-              { left: 65, top: 75, rotate: 10 },
-              { left: 45, top: 25, rotate: 3 },
-              { left: 50, top: 60, rotate: -6 },
-            ];
-            const position = positions[i % positions.length];
-
+          {(() => {
+            const placed = [];
+            return messages.map((msg, i) => {
+              const seed = seedToUnit(msg?.id ?? `${msg?.name}-${i}`);
+              const position = placeNonOverlapping(i, seed, placed);
+              placed.push(position);
             return (
               <div
                 key={i}
@@ -105,7 +176,8 @@ export default function MessagesList() {
                 </div>
               </div>
             );
-          })}
+            });
+          })()}
         </div>
       </div>
 

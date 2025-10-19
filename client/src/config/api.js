@@ -51,7 +51,7 @@ export const FALLBACK_DATA = {
   messages: [
     {
       id: 1,
-      name: "Admin",
+      name: "Trung",
       message: "Chúc mừng ngày Phụ nữ Việt Nam 20/10! 💐",
       timestamp: new Date().toISOString()
     }

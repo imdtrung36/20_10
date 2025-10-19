@@ -32,7 +32,7 @@ function App() {
       />
 
       <header className="header">
-        <h1 className="title">💐 Ngày Phụ nữ Việt Nam</h1>
+        <h1 className="title">💖 Gửi Trao Yêu Thương</h1>
         <div className="menu">
           <button onClick={() => setPage("form")}>Gửi lời chúc</button>
           <button onClick={() => setPage("messages")}>Xem lời chúc</button>
