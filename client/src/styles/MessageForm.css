@@ -185,19 +185,17 @@
   align-items: center;
 }
 
-.inline-header h3 {
-  color: #d63384;
-  margin: 0;
-}
+.inline-title { color: #d63384; font-weight: 700; }
 
 .inline-content {
-  background: #fff7fb;
+  background: #ffffff;
   border-radius: 12px;
-  padding: 14px;
-  margin-top: 10px;
+  padding: 16px;
+  margin-top: 12px;
+  border: 1px solid #ffe0ef;
 }
 
-.inline-message { margin: 0 0 8px 0; font-style: italic; }
+.inline-message { margin: 0 0 10px 0; font-style: italic; font-size: 16px; }
 .inline-sender { color: #d63384; font-weight: bold; }
 
 @keyframes slideIn {

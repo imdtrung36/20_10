@@ -84,16 +84,23 @@ export default function MessageForm({ onSubmitted }) {
         {notice && <p className="notice">{notice}</p>}
       </form>
 
-      {/* Khung hiển thị tên + nội dung ngay sau khi gửi */}
+      {/* Modal thiệp chúc mừng xuất hiện giữa màn hình */}
       {showCard && (
-        <div className="inline-result-card">
-          <div className="inline-header">
-            <h3>💌 Lời chúc đã gửi</h3>
-            <button className="close-btn" onClick={closeCard}>×</button>
-          </div>
-          <div className="inline-content">
-            <p className="inline-message">“{cardMessage}”</p>
-            <span className="inline-sender">— {cardSender}</span>
+        <div className="celebration-card-overlay" onClick={closeCard} role="dialog" aria-label="Lời chúc">
+          <div className="celebration-card" onClick={(e) => e.stopPropagation()}>
+            <div className="card-header">
+              <h2>💌 Lời chúc</h2>
+              <button className="close-btn" onClick={closeCard}>×</button>
+            </div>
+            <div className="card-content">
+              <div className="message-display">
+                <p>"{cardMessage}"</p>
+                <span className="sender">— {cardSender}</span>
+              </div>
+            </div>
+            <div className="card-footer">
+              <p>Chúc bạn một ngày tốt lành! 🌸</p>
+            </div>
           </div>
         </div>
       )}

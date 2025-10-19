@@ -150,6 +150,21 @@
 }
 .reset-btn:hover { background: #dc2626; }
 
+.view-random-btn {
+  position: fixed;
+  right: 20px;
+  top: 140px;
+  background: #d63384;
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.2);
+  cursor: pointer;
+  z-index: 1000;
+}
+.view-random-btn:hover { background: #c2185b; }
+
 /* Modal hiển thị tin nhắn */
 .message-modal-overlay {
   position: fixed;

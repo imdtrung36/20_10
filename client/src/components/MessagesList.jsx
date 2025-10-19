@@ -59,6 +59,13 @@ export default function MessagesList() {
     }
   };
 
+  // Mở ngẫu nhiên một lời chúc trong danh sách
+  const openRandomMessage = () => {
+    if (!messages || messages.length === 0) return;
+    const idx = Math.floor(Math.random() * messages.length);
+    setSelectedMessage(messages[idx]);
+  };
+
   return (
     <>
       {/* 🌸 Cây + lá thư */}
@@ -104,6 +111,9 @@ export default function MessagesList() {
 
       {/* Reset toàn bộ */}
       <button className="reset-btn" onClick={resetAllMessages}>⟲ Reset</button>
+
+      {/* Nút xem 1 lời chúc (mở modal giống ảnh demo) */}
+      <button className="view-random-btn" onClick={openRandomMessage}>👀 Xem lời chúc</button>
 
       {/* 📨 Modal hiển thị lời chúc */}
       {selectedMessage && (
