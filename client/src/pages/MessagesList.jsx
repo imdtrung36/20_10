@@ -6,54 +6,94 @@ import "../styles/MessagesList.css";
 export default function MessagesList() {
   const [messages, setMessages] = useState([]);
   const [selectedMessage, setSelectedMessage] = useState(null);
+  const [visitorToken, setVisitorToken] = useState(null);
+  const [shareLink, setShareLink] = useState("");
+  const [copyNotice, setCopyNotice] = useState("");
 
   useEffect(() => {
-    axios.get(API_ENDPOINTS.MESSAGES)
-      .then((res) => {
-        setMessages(res.data);
-      })
-      .catch(error => {
-        console.warn('API not available, using fallback data:', error);
-        setMessages(FALLBACK_DATA.messages);
-      });
+    // Lấy visitorToken đã lưu khi gửi lời chúc
+    const token = localStorage.getItem("visitorToken");
+    setVisitorToken(token);
+
+    if (token) {
+      // 🩷 Nếu có token → hiển thị lời chúc cá nhân
+      loadMessages(`share-tree/${token}`);
+      setShareLink(`${window.location.origin}/20_10/messages?token=${token}`);
+    } else {
+      // 🌸 Nếu chưa có token → hiển thị toàn bộ lời chúc chung
+      loadMessages("");
+    }
   }, []);
 
-  const openMessage = (message) => {
-    setSelectedMessage(message);
+  const loadMessages = async (path = "") => {
+    try {
+      const res = await axios.get(
+        path ? `${API_ENDPOINTS.MESSAGES}/${path}` : API_ENDPOINTS.MESSAGES
+      );
+      const data = res.data.data || res.data;
+      setMessages(data);
+    } catch (error) {
+      console.warn("⚠️ API lỗi, dùng fallback:", error);
+      setMessages(FALLBACK_DATA.messages);
+    }
   };
 
-  const closeMessage = () => {
-    setSelectedMessage(null);
+  const openMessage = (message) => setSelectedMessage(message);
+  const closeMessage = () => setSelectedMessage(null);
+
+  const deleteAllMessages = async () => {
+    const key = prompt("🔑 Nhập key admin để xác nhận xoá toàn bộ:");
+    if (!key) return;
+    try {
+      const res = await axios.delete(`${API_ENDPOINTS.MESSAGES}?key=${key}`);
+      if (res.data.success) {
+        alert("✅ Đã xoá toàn bộ lời chúc!");
+        setMessages([]);
+      } else {
+        alert("❌ Sai key hoặc server từ chối!");
+      }
+    } catch (err) {
+      console.error("Lỗi khi xoá:", err);
+      alert("⚠️ Không thể xoá (server lỗi hoặc sai key).");
+    }
+  };
+
+  const handleShare = async () => {
+    if (!shareLink) return;
+    try {
+      await navigator.clipboard.writeText(shareLink);
+      setCopyNotice("✅ Đã copy link chia sẻ!");
+      setTimeout(() => setCopyNotice(""), 3000);
+    } catch {
+      alert("⚠️ Không thể copy link, hãy tự copy thủ công.");
+    }
   };
 
   return (
     <>
       <div className="tree-container">
+        <h2>
+          {visitorToken
+            ? "💖 Cây lời chúc của bạn"
+            : "🌸 Tất cả lời chúc"}
+        </h2>
+
         <div className="tree">
           <img src={import.meta.env.BASE_URL + "tree.png"} alt="Tree" />
-          {messages.map((msg, i) => {
-            // Vị trí cố định dựa trên index
-            const positions = [
-              { left: 20, top: 15, rotate: -5 },
-              { left: 70, top: 20, rotate: 8 },
-              { left: 15, top: 45, rotate: -12 },
-              { left: 75, top: 40, rotate: 15 },
-              { left: 25, top: 70, rotate: -8 },
-              { left: 65, top: 75, rotate: 10 },
-              { left: 45, top: 25, rotate: 3 },
-              { left: 50, top: 60, rotate: -6 }
-            ];
 
-            const position = positions[i % positions.length];
+          {messages.map((msg, i) => {
+            const randomLeft = 20 + Math.random() * 60;
+            const randomTop = 15 + Math.random() * 60;
+            const randomRotate = Math.random() * 20 - 10;
 
             return (
               <div
                 key={i}
                 className="letter clickable-card"
                 style={{
-                  left: `${position.left}%`,
-                  top: `${position.top}%`,
-                  transform: `rotate(${position.rotate}deg)`,
+                  left: `${randomLeft}%`,
+                  top: `${randomTop}%`,
+                  transform: `rotate(${randomRotate}deg)`,
                 }}
                 onClick={() => openMessage(msg)}
               >
@@ -69,25 +109,37 @@ export default function MessagesList() {
         </div>
       </div>
 
-      {/* Modal hiển thị tin nhắn đầy đủ */}
+      {/* 🗑️ Xoá tất cả (admin) */}
+      <button className="delete-all-btn" onClick={deleteAllMessages}>
+        🗑️ Xóa tất cả lời chúc
+      </button>
+
+      {/* 💌 Modal hiển thị chi tiết lời chúc */}
       {selectedMessage && (
         <div className="message-modal-overlay" onClick={closeMessage}>
           <div className="message-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>💌 Lời chúc</h2>
-              <button className="close-btn" onClick={closeMessage}>×</button>
+              <button className="close-btn" onClick={closeMessage}>
+                ×
+              </button>
             </div>
             <div className="modal-content">
-              <div className="message-display">
-                <p>"{selectedMessage.message}"</p>
-                <span className="sender">— {selectedMessage.name}</span>
-              </div>
-            </div>
-            <div className="modal-footer">
-              <p>Chúc bạn một ngày tốt lành! 🌸</p>
+              <p>"{selectedMessage.message}"</p>
+              <span>— {selectedMessage.name}</span>
             </div>
           </div>
         </div>
+      )}
+
+      {/* 🔗 Nút share nổi góc phải */}
+      {visitorToken && (
+        <>
+          <button className="share-floating-btn" onClick={handleShare}>
+            🔗 Share
+          </button>
+          {copyNotice && <div className="copy-toast">{copyNotice}</div>}
+        </>
       )}
     </>
   );
