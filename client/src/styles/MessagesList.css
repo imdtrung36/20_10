@@ -134,6 +134,22 @@
   margin: 0;
 }
 
+/* Reset button */
+.reset-btn {
+  position: fixed;
+  right: 20px;
+  top: 90px;
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.2);
+  cursor: pointer;
+  z-index: 1000;
+}
+.reset-btn:hover { background: #dc2626; }
+
 /* Modal hiển thị tin nhắn */
 .message-modal-overlay {
   position: fixed;

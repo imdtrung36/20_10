@@ -40,7 +40,24 @@ export default function MessagesList() {
     setSelectedMessage(null);
   };
 
-  // (Đã bỏ nút xoá toàn bộ)
+  // Reset toàn bộ lời chúc (yêu cầu admin key trên server)
+  const resetAllMessages = async () => {
+    const ok = confirm("Bạn có chắc muốn xóa TẤT CẢ lời chúc?");
+    if (!ok) return;
+    const key = prompt("Nhập admin key để xác nhận:");
+    if (key === null) return;
+    try {
+      const res = await axios.delete(`${API_ENDPOINTS.MESSAGES}?key=${encodeURIComponent(key)}`);
+      if (res.data && res.data.success) {
+        setMessages([]);
+        alert("Đã reset toàn bộ lời chúc.");
+      } else {
+        alert("Không thể reset (sai key hoặc server từ chối).");
+      }
+    } catch (e) {
+      alert("Không thể reset (lỗi kết nối hoặc server).");
+    }
+  };
 
   return (
     <>
@@ -50,23 +67,26 @@ export default function MessagesList() {
           <img src={import.meta.env.BASE_URL + "tree.png"} alt="Tree" />
 
           {messages.map((msg, i) => {
-            // Phân bố vị trí ngẫu nhiên có hạt giống theo index để không bị trùng và hỗ trợ không giới hạn số thư
-            const seeded = (n) => {
-              const x = Math.sin(n * 9999.97 + 0.12345) * 10000;
-              return x - Math.floor(x);
-            };
-            const left = 15 + seeded(i * 2 + 1) * 70; // 15% → 85%
-            const top = 12 + seeded(i * 2 + 7) * 70;  // 12% → 82%
-            const rotate = (seeded(i * 3 + 4) - 0.5) * 24; // -12° → 12°
+            const positions = [
+              { left: 20, top: 15, rotate: -5 },
+              { left: 70, top: 20, rotate: 8 },
+              { left: 15, top: 45, rotate: -12 },
+              { left: 75, top: 40, rotate: 15 },
+              { left: 25, top: 70, rotate: -8 },
+              { left: 65, top: 75, rotate: 10 },
+              { left: 45, top: 25, rotate: 3 },
+              { left: 50, top: 60, rotate: -6 },
+            ];
+            const position = positions[i % positions.length];
 
             return (
               <div
                 key={i}
                 className="letter clickable-card"
                 style={{
-                  left: `${left.toFixed(2)}%`,
-                  top: `${top.toFixed(2)}%`,
-                  transform: `rotate(${rotate.toFixed(2)}deg)`,
+                  left: `${position.left}%`,
+                  top: `${position.top}%`,
+                  transform: `rotate(${position.rotate}deg)`,
                 }}
                 onClick={() => openMessage(msg)}
               >
@@ -82,7 +102,8 @@ export default function MessagesList() {
         </div>
       </div>
 
-      {/* Nút xoá toàn bộ đã được loại bỏ theo yêu cầu */}
+      {/* Reset toàn bộ */}
+      <button className="reset-btn" onClick={resetAllMessages}>⟲ Reset</button>
 
       {/* 📨 Modal hiển thị lời chúc */}
       {selectedMessage && (
