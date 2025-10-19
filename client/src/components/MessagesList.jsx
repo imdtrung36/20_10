@@ -50,26 +50,23 @@ export default function MessagesList() {
           <img src={import.meta.env.BASE_URL + "tree.png"} alt="Tree" />
 
           {messages.map((msg, i) => {
-            const positions = [
-              { left: 20, top: 15, rotate: -5 },
-              { left: 70, top: 20, rotate: 8 },
-              { left: 15, top: 45, rotate: -12 },
-              { left: 75, top: 40, rotate: 15 },
-              { left: 25, top: 70, rotate: -8 },
-              { left: 65, top: 75, rotate: 10 },
-              { left: 45, top: 25, rotate: 3 },
-              { left: 50, top: 60, rotate: -6 },
-            ];
-            const position = positions[i % positions.length];
+            // Phân bố vị trí ngẫu nhiên có hạt giống theo index để không bị trùng và hỗ trợ không giới hạn số thư
+            const seeded = (n) => {
+              const x = Math.sin(n * 9999.97 + 0.12345) * 10000;
+              return x - Math.floor(x);
+            };
+            const left = 15 + seeded(i * 2 + 1) * 70; // 15% → 85%
+            const top = 12 + seeded(i * 2 + 7) * 70;  // 12% → 82%
+            const rotate = (seeded(i * 3 + 4) - 0.5) * 24; // -12° → 12°
 
             return (
               <div
                 key={i}
                 className="letter clickable-card"
                 style={{
-                  left: `${position.left}%`,
-                  top: `${position.top}%`,
-                  transform: `rotate(${position.rotate}deg)`,
+                  left: `${left.toFixed(2)}%`,
+                  top: `${top.toFixed(2)}%`,
+                  transform: `rotate(${rotate.toFixed(2)}deg)`,
                 }}
                 onClick={() => openMessage(msg)}
               >
