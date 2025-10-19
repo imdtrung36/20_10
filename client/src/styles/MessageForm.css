@@ -168,6 +168,38 @@
   to { opacity: 1; }
 }
 
+/* ===== Khung inline sau khi gửi ===== */
+.inline-result-card {
+  background: #fff;
+  border: 2px solid #fecfef;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.12);
+  width: 450px;
+  margin: 16px auto 0;
+  padding: 16px;
+}
+
+.inline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inline-header h3 {
+  color: #d63384;
+  margin: 0;
+}
+
+.inline-content {
+  background: #fff7fb;
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 10px;
+}
+
+.inline-message { margin: 0 0 8px 0; font-style: italic; }
+.inline-sender { color: #d63384; font-weight: bold; }
+
 @keyframes slideIn {
   from { 
     transform: translateY(-50px) scale(0.8);
