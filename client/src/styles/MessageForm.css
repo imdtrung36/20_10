@@ -60,6 +60,36 @@
   transform: scale(1.05);
 }
 
+/* 📱 Mobile optimizations */
+@media (max-width: 480px) {
+  .message-form {
+    width: min(92vw, 420px);
+    padding: 18px 16px;
+    margin: 24px auto;
+    border-radius: 12px;
+  }
+
+  .message-form input,
+  .message-form textarea {
+    padding: 12px 14px;
+    font-size: 15px;
+  }
+
+  .message-form input { height: 46px; }
+  .message-form textarea { height: 110px; }
+
+  .message-form button {
+    padding: 12px 16px;
+    font-size: 15px;
+  }
+
+  /* Modal spacing on small screens */
+  .celebration-card { width: 94vw; padding: 20px; }
+  .card-header h2 { font-size: 20px; }
+  .message-display p { font-size: 17px; }
+  .sender { font-size: 13px; }
+}
+
 /* 🎉 Thông báo sau khi gửi */
 .notice {
   color: #28a745;
